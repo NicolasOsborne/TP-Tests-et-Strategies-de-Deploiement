@@ -3,18 +3,14 @@ import type { ProductRepository } from './domain/ports/ProductRepository.js'
 import type { ProductOutputPort } from './domain/ports/ProductOutputPort.js'
 import type { ProductData } from './domain/entities/Product.js'
 
-// Importation des CLASSES (valeurs) des Use Cases
 import { CreateProductUseCase } from './application/usecases/CreateProductUseCase.js'
 import { GetProductByIdUseCase } from './application/usecases/GetProductByIdUseCase.js'
 import { UpdateProductUseCase } from './application/usecases/UpdateProductUseCase.js'
 import { DeleteProductUseCase } from './application/usecases/DeleteProductUseCase.js'
 import { GetAllProductsUseCase } from './application/usecases/GetAllProductsUseCase.js'
 
-// Importation des INTERFACES/TYPES (types purs) des Use Cases
 import type { CreateProductInput } from './application/usecases/CreateProductUseCase.js'
 import type { UpdateProductInput } from './application/usecases/UpdateProductUseCase.js'
-
-// --- ADAPTATEUR : ConsoleProductPresenter (Implémentation du Port ProductOutputPort) ---
 
 class ConsoleProductPresenter implements ProductOutputPort {
   presentProduct(productData: ProductData): void {
@@ -35,14 +31,8 @@ class ConsoleProductPresenter implements ProductOutputPort {
   }
 }
 
-// --- INITIALISATION DES PORTS ET ADAPTATEURS ---
-
-// L'adaptateur d'infrastructure implémente le port du domaine
 const productRepository: ProductRepository = new InMemoryProductRepository()
-// L'adaptateur de présentation implémente le port du domaine
 const productPresenter: ProductOutputPort = new ConsoleProductPresenter()
-
-// --- INSTANCIATION DES CAS D'UTILISATION (Injection de Dépendances) ---
 
 const createProductUseCase = new CreateProductUseCase(
   productRepository,
@@ -93,9 +83,6 @@ async function runDemo() {
   }
   await createProductUseCase.execute(mouseInput)
 
-  // Récupérer l'ID du premier produit créé (Laptop) pour les étapes suivantes
-  // Note: On utilise le Repository directement pour récupérer des entités, ce qui est acceptable
-  // dans le cadre d'un test/démarrage pour connaître les IDs.
   const allProductsBeforeUpdate = await productRepository.findAll()
   const laptopProduct = allProductsBeforeUpdate.find(
     (p) => p.name === 'Laptop Pro'
@@ -114,9 +101,8 @@ async function runDemo() {
       `\n[D] Exécution: UpdateProductUseCase (ID: ${laptopId}, Nouveau Prix)`
     )
     const updateInput: UpdateProductInput = {
-      // UpdateProductInput est un type
       id: laptopId,
-      price: 1150.0, // Promotion!
+      price: 1150.0,
       stock: 10,
     }
     await updateProductUseCase.execute(updateInput)
