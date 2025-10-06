@@ -65,6 +65,7 @@ Composants clés :
 - Installer les dépendances :
 
 ```bash
+cd ProductManager
 npm install
 ```
 
@@ -74,6 +75,10 @@ npm install
 npm start
 ```
 
-- Accéder à l'application à l'addresse http://localhost:3000
+- Jouer les tests :
+
+```bash
+npm run test
+```
 
 ## Partie 1 : Tests Unitaires (Core Domain)
